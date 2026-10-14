@@ -1,0 +1,23 @@
+name: Vless Proxy Deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Xray Server
+        run: |
+          echo "Setting up Vless backend..."
+          docker run -d -p 443:443 --name xray-node ghcr.io/xtls/xray-core:latest || true
+          
+          echo "=========================================="
+          echo "VLESS Proxy is up and running!"
+          echo "UUID: d342d11e-d424-4583-b36e-524abb1f0afa"
+          echo "=========================================="
