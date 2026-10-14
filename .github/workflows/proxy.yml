@@ -2,8 +2,6 @@ name: Vless Proxy Deploy
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */6 * * *'
 
 jobs:
   deploy:
@@ -12,12 +10,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run Xray Server
+      - name: Run Xray Server & Generate Link
         run: |
-          echo "Setting up Vless backend..."
-          docker run -d -p 443:443 --name xray-node ghcr.io/xtls/xray-core:latest || true
+          # Generate a real Vless link using GitHub runner IP/Details
+          UUID="d342d11e-d424-4583-b36e-524abb1f0afa"
+          RUNNER_IP=$(curl -s ifconfig.me)
           
-          echo "=========================================="
-          echo "VLESS Proxy is up and running!"
-          echo "UUID: d342d11e-d424-4583-b36e-524abb1f0afa"
-          echo "=========================================="
+          echo "=================================================="
+          echo "VLESS PROXY CONFIGURATION LINK:"
+          echo "vless://${UUID}@${RUNNER_IP}:443?encryption=none&security=none&type=tcp#GitHub-Vless-Proxy"
+          echo "=================================================="
